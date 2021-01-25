@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paint</title>
+</head>
+<body>
+    <div id="controls">
+
+    <input type="color" name="" id="color" class="form-control" value="" required="required" title="">
+    <input type="number" name="" id="thickness" class="form-control" value="3" min="{5"} max="" step="" required="required" title="">
+        
+    </div>
+
+    <canvas id="canvas" width="500" height="500">
+
+    </canvas>
+
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+        #canvas{
+            border:1px solid black;
+        }
+        #color{
+            padding:0px;
+            border:none;
+            background:none;
+            width:44px;
+            height:44px;
+        }
+        #thickness{
+            padding:10px;
+        }
+    </style>
+
+<script>
+    const canvas= document.getElementById("canvas");
+    const ctx=canvas.getContext("2d");
+
+    ctx.fillStyle="black";
+    let brushColor="black";
+    let brusheSize=3;
+
+    document.getElementById("color").addEventListener("change",function(){
+        brushColor=this.value;
+    });
+    document.getElementById("thickness").addEventListener("change",function(){
+        brushSize=this.value;
+    });
+
+    let painting=false;
+
+    function paintingStart(e){
+        painting=true;
+        draw(e);
+    }
+    function paintingEnd(e){
+        painting=false;
+        ctx.beginPath();
+    }
+    function draw(e){
+
+        if(painting==false) return;
+
+        let  x = e.clientX;
+        let y = e.clientY - canvas.offsetTop;
+
+        ctx.lineWidth = brushSize;
+        ctx.lineCap = "round";
+        ctx.lineTo(x,y);
+        ctx.strokeStyle=brushColor;
+        ctx.stroke();
+
+    }
+
+    canvas.addEventListener("mousedown",paintingStart);
+    canvas.addEventListener("mouseup",paintingEnd);
+    canvas.addEventListener("mousemove",draw);
+
+</script>
+
+</body>
+</html>
